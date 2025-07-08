@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.noloverme</groupId>
+    <artifactId>NLobby</artifactId>
+    <version>1.1</version>
+    <packaging>jar</packaging>
+
+    <name>NLobby</name>
+    <description>Плагин для BungeeCord, позволяющий переходить на лобби-серверы.</description>
+
+    <properties>
+        <java.version>17</java.version>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
+
+    <repositories>
+        <repository>
+            <id>sonatype-oss-snapshots</id>
+            <url>https://oss.sonatype.org/content/repositories/snapshots/</url>
+        </repository>
+        <repository>
+            <id>j центрум</id>
+            <name>j центреум-репо</name>
+            <url>https://repo.jcentrum.net/releases</url>
+        </repository>
+    </repositories>
+
+    <dependencies>
+        <!-- BungeeCord API -->
+        <dependency>
+            <groupId>net.md-5</groupId>
+            <artifactId>bungeecord-api</artifactId>
+            <version>1.20-R0.1</version>
+            <scope>provided</scope>
+        </dependency>
+        <!-- BungeeCord Config -->
+        <dependency>
+            <groupId>net.md-5</groupId>
+            <artifactId>bungeecord-config</artifactId>
+            <version>1.20-R0.1</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>net.md-5</groupId>
+            <artifactId>bungeecord-api</artifactId>
+            <version>1.20-R0.1</version>
+            <type>javadoc</type>
+            <scope>provided</scope>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.8.1</version>
+                <configuration>
+                    <source>${java.version}</source>
+                    <target>${java.version}</target>
+                </configuration>
+            </plugin>
+             <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-shade-plugin</artifactId>
+                <version>3.5.0</version> <!-- Обновленная версия -->
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>shade</goal>
+                        </goals>
+                        <configuration>
+                            <relocations>
+                                <!--  Если нужно, переместите пакеты зависимостей, чтобы избежать конфликтов -->
+                                <relocation>
+                                    <pattern>com.google.common</pattern>
+                                    <shadedPattern>com.noloverme.nlobby.shaded.com.google.common</shadedPattern>
+                                </relocation>
+                            </relocations>
+                            <transformers>
+                                <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+                                    <mainClass>com.noloverme.nlobby.NLobby</mainClass>
+                                </transformer>
+                            </transformers>
+                            <outputFile>${project.basedir}/target/${project.artifactId}-${project.version}.jar</outputFile>
+                            <createDependencyReducedPom>false</createDependencyReducedPom> <!-- Важно для BungeeCord -->
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+                <filtering>true</filtering>
+            </resource>
+        </resources>
+    </build>
+</project>

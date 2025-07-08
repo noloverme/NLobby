@@ -1,0 +1,5 @@
+com\noloverme\nlobby\NLobby.class
+com\noloverme\nlobby\command\NHubCommand.class
+com\noloverme\nlobby\util\MessageUtil.class
+com\noloverme\nlobby\config\ConfigManager.class
+com\noloverme\nlobby\command\LobbyCommand.class
